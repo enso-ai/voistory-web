@@ -22,6 +22,7 @@ const ArrorwRight = () => (
 );
 
 const ModalContainer = styled.div`
+    visibility: ${props => props.$visible ? 'visible' : 'hidden'};
     position: fixed;
     top: 0;
     left: 0;
@@ -97,13 +98,16 @@ const DropdownContainer = styled.div`
     right: 24px;
 `
 
-const Modal = ({ onConfirm }) => {
+const Modal = ({ onConfirm, showModal }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [selectedCluster, setSelectedCluster] = useState('');
 
 
     const handlePhoneNumberChange = (event) => {
-        setPhoneNumber(event.target.value);
+        const value = event.target.value;
+        // Replace any non-digit character with an empty string and limit the length to 10
+        const filteredValue = value.replace(/\D/g, '').slice(0, 10);
+        setPhoneNumber(filteredValue);
     };
 
 
@@ -115,7 +119,15 @@ const Modal = ({ onConfirm }) => {
     const validatePhoneNumber = () => {
         // Implement your phone number validation logic here
         // Return true if the phone number is valid, false otherwise
-        console.log("validate phone number is called:", phoneNumber)
+        if (phoneNumber.length === 10 && /^\d{10}$/.test(phoneNumber)) {
+            console.log("Phone number is valid:", phoneNumber);
+            onConfirm(phoneNumber, selectedCluster)
+        } else {
+            console.log("Invalid phone number:", phoneNumber);
+            alert("Invalid phone number")
+            // Phone number is invalid
+            // You can show an error message or alert to the user here
+        }
     };
 
 
@@ -126,7 +138,7 @@ const Modal = ({ onConfirm }) => {
     };
 
     return (
-        <ModalContainer>
+        <ModalContainer $visible={showModal}>
             <ModalCard>
                 <TitleContainer> Welcome to Voistory! </TitleContainer>
                 <ConfigContainer>
