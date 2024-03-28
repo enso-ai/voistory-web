@@ -4,36 +4,40 @@ import styled, { keyframes } from 'styled-components';
 // Define the animation
 const scaleAnimation = keyframes`
     from {
+        opacity: 1;
         transform: scale(1);
+        transform-origin: center;
     }
     to {
-        transform: scale(var(--scale-factor));
+        opacity: 0;
+        transform: scale(2.1);
+        transform-origin: center;
     }
 `;
 
 // transform: scale(var(--scale-factor));
 // Styled component for the circle
 const AnimatedCircle = styled.div`
-    width: var(--initial-size);
-    height: var(--initial-size);
-    animation: ${scaleAnimation} 0.8s ease-out infinite;
+    width: ${props => props.initialSize}px;
+    height: ${props => props.initialSize}px;
+
     transform-origin: center;
+    animation: ${scaleAnimation} 1s ease-out infinite;
 
     border: 5px solid gray;
     border-radius: 50%;
     background-color: transparent;
-    box-sizing: border-box;
 `;
 
 // Component that uses the AnimatedCircle
-const CircleComponent = ({ initialSize, targetScale }) => {
+const CircleLoader = ({ initialSize, targetScale }) => {
     // Calculate the target scale based on the percentage
     // Assuming the targetSize prop is a value between 0 and 1 (e.g., 0.5 for 50%)
 
-    return <AnimatedCircle style={{
-        '--initial-size': `${initialSize}px`,
-        '--scale-factor': `${targetScale}`,
-    }} />;
+    return <AnimatedCircle
+        initialSize={initialSize}
+    />;
+
 };
 
-export default CircleComponent;
+export default CircleLoader;
