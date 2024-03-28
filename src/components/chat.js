@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import CircleComponent from './circle'
+import CircleLoader from './circleLoader'
 
 import { getChatSession } from 'services/chatService'
 import WebSocketClient from 'services/websocket'
 import { Speaker, Microphone} from 'utils/audio'
+import Modal from './modal'
+import MicrophoneIcon from 'icons/microphone'
 
 const Base = styled.div`
     position: relative;
@@ -13,7 +15,13 @@ const Base = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #0d99ff;
+    background-color: #6d6875;
+`
+
+const MicButtonContainer = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
 `
 
 const LoaderContainer = styled.div`
@@ -26,28 +34,78 @@ const LoaderContainer = styled.div`
 const MicButton = styled.div`
     position: relative;
     display: inline-block;
-    width: 150px;
-    height: 150px;
+    box-sizing: border-box;
+    width: 140px;
+    height: 140px;
+    padding: 15px;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: white;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+        box-shadow: 0 0 0.2rem 0.4rem rgba(200, 200, 200, 0.9);
+    }
+
+    &:active {
+        scale: 0.9;
+    }
 `
 
-const MicIcon = styled.img`
-    position: relative;
-    top: -5px;
-    left: -5px;
-    width: 160px;
-    height: 160px;
-    object-fit: fill;
-`
+const ConIndicator = styled.img`
+    height: 100px;
+    margin-top: 36px;
+
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+`;
+
+const FooterContainer = styled.div`
+    position: absolute;
+    bottom: 0;
+
+    height: 36px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgba(128, 128, 128, 0.5);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 12px;
+`;
+
+const FooterBlock = styled.div`
+    display: flex;
+    flex-direction: row;
+    color: white;
+`;
+
+const SystemInfo = styled.div`
+    color: white;
+    padding: 0px 5px;
+    border-right: 1px solid white;
+`;
 
 const ChatPage = () => {
+    const [isModalVisible, setModalVisible] = useState(true)
     const [isLoading, setLoading] = useState(false)
     const [connected, setConnected] = useState(false)
     const [ws, setWs] = useState(false)
     const [mic, setMic] = useState(null)
     const [speaker, setSpeaker] = useState(null)
-    const [phoneNumber, setPhoneNumber] = useState("13142508541")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [targetCluster, setTargetCluster] = useState("None")
+
+    const initChatPage = (phoneNumber, targetCluster) => {
+        console.log("initChatPage", phoneNumber, targetCluster)
+        setPhoneNumber(phoneNumber)
+        setTargetCluster(targetCluster)
+        setModalVisible(false)
+    }
 
     const handleClick = () => {
         setLoading(true)
@@ -59,7 +117,7 @@ const ChatPage = () => {
             setConnected(false)
             setLoading(false)
         } else {
-            getChatSession(phoneNumber).then(async (resp) => {
+            getChatSession(targetCluster, phoneNumber).then(async (resp) => {
                 let {chat_session_id, websocket_url} = resp
                 console.log(chat_session_id, websocket_url)
                 const newSpeaker = new Speaker()
@@ -117,18 +175,29 @@ const ChatPage = () => {
 
     return (
         <Base>
-        <div style={{border: "1px solid pink", position: "relative"}}>
-            <LoaderContainer $visiable = { isLoading ? 'visible' : 'hidden' }>
-                <CircleComponent initialSize={150} targetScale={1.5}/>
-            </LoaderContainer>
-            <MicButton onClick={handleClick} disabled={isLoading}>
+            <Modal onConfirm={initChatPage} showModal={isModalVisible} />
+            <MicButtonContainer>
+                <LoaderContainer $visiable = { isLoading ? 'visible' : 'hidden' }>
+                    <CircleLoader initialSize={130} targetScale={1.1}/>
+                </LoaderContainer>
+                {/* <MicButton onClick={handleClick} disabled={isLoading}> */}
+                <MicButton onClick={() => {setConnected(!connected)}} disabled={isLoading}>
+                    <MicrophoneIcon />
+                </MicButton>
                 {connected ? (
-                    <MicIcon src="/mic_icon_on.png" alt="Image" />
+                    <ConIndicator src="/on-air.svg" alt="On Air" draggable='false'/>
                 ) : (
-                    <MicIcon src="/mic_icon_off.png" alt="Image" />
+                    <ConIndicator src="/off-air.svg" alt="Off Air" draggable='false' />
                 )}
-            </MicButton>
-        </div>
+            </MicButtonContainer>
+            <FooterContainer>
+                <FooterBlock>
+                    <SystemInfo>Status: {connected ? "connected" : "disconnected"}</SystemInfo>
+                    <SystemInfo>#Cell: {phoneNumber}</SystemInfo>
+                    <SystemInfo>Backend: { targetCluster }</SystemInfo>
+                </FooterBlock>
+                <FooterBlock>Powered by Voistory</FooterBlock>
+            </FooterContainer>
         </Base>
     )
 }
