@@ -6,7 +6,10 @@ import { getChatSession } from 'services/chatService'
 import WebSocketClient from 'services/websocket'
 import { Speaker, Microphone} from 'utils/audio'
 import Modal from './modal'
-import MicrophoneIcon from 'icons/microphone'
+import {
+    TbMicrophone, TbMicrophoneOff
+} from "react-icons/tb";
+
 
 const Base = styled.div`
     position: relative;
@@ -61,7 +64,24 @@ const ConIndicator = styled.img`
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
+
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 `;
+
+const ConIndicatorEmpty = styled.div`
+    height: 100px;
+    margin-top: 36px;
+`
 
 const FooterContainer = styled.div`
     position: absolute;
@@ -182,13 +202,12 @@ const ChatPage = () => {
                 </LoaderContainer>
                 {/* <MicButton onClick={handleClick} disabled={isLoading}> */}
                 <MicButton onClick={handleClick} disabled={isLoading}>
-                    <MicrophoneIcon />
+                    { connected ? <TbMicrophoneOff size="100%"/> : <TbMicrophone size="100%"/>}
                 </MicButton>
-                {connected ? (
-                    <ConIndicator src="/on-air.svg" alt="On Air" draggable='false'/>
-                ) : (
+                {connected ?
                     <ConIndicator src="/off-air.svg" alt="Off Air" draggable='false' />
-                )}
+                    : <ConIndicatorEmpty />
+                }
             </MicButtonContainer>
             <FooterContainer>
                 <FooterBlock>
