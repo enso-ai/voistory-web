@@ -80,6 +80,13 @@ export class Speaker {
 }
 
 export class Microphone {
+    // each time audioContext collect 128 samples to generate
+    // one chunk of audio data regardless of the sample rate.
+    // For 16k sample rate, 128 samples is ~8ms of audio data.
+    // we will group 5 chunks together to form a 40ms audio data
+    // to match what the server expects.
+    GROUP_SIZE = 5;
+
     constructor() {
         this.audioStream = null;
         this.streaming = false;
@@ -108,10 +115,10 @@ export class Microphone {
     async groupChunks(handleData) {
         this.streaming = true;
         while (this.streaming) {
-            if (this.frames.length >= 10) {
-                const chunkFrames = this.frames.splice(0, 10);
+            if (this.frames.length >= this.GROUP_SIZE) {
+                const chunkFrames = this.frames.splice(0, this.GROUP_SIZE);
                 const chunkSize = chunkFrames[0].length
-                let pcmData = new Int16Array(chunkSize * 10);
+                let pcmData = new Int16Array(chunkSize * this.GROUP_SIZE);
                 for (let i = 0; i < chunkFrames.length; i++) {
                     const frame = chunkFrames[i];
                     if (pcmData === null) {
