@@ -181,7 +181,7 @@ const ChatPage = () => {
                     <CircleLoader initialSize={130} targetScale={1.1}/>
                 </LoaderContainer>
                 {/* <MicButton onClick={handleClick} disabled={isLoading}> */}
-                <MicButton onClick={() => {setConnected(!connected)}} disabled={isLoading}>
+                <MicButton onClick={handleClick} disabled={isLoading}>
                     <MicrophoneIcon />
                 </MicButton>
                 {connected ? (
