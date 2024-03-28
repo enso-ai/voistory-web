@@ -1,6 +1,5 @@
 export class Speaker {
     constructor() {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.frames = [];
         this.speakerOn = false;
     }
@@ -32,6 +31,7 @@ export class Speaker {
     }
 
     async run() {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.speakerOn = true;
         let nextBufferStartTime = 0;
         while (this.speakerOn) {
@@ -70,6 +70,12 @@ export class Speaker {
     stop() {
         this.speakerOn = false;
         this.frames = [];
+        // Close the AudioContext to release audio processing resources
+        if (this.audioContext && this.audioContext.state !== 'closed') {
+            this.audioContext.close().then(() => {
+            console.log('Output AudioContext closed and resources released');
+            });
+        } 
     }
 }
 
@@ -156,9 +162,9 @@ export class Microphone {
         }
 
         // Close the AudioContext to release audio processing resources
-        if (audioContext) {
+        if (audioContext && audioContext.state !== 'closed') {
             audioContext.close().then(() => {
-                console.log('AudioContext closed and resources released');
+                console.log('Input AudioContext closed and resources released');
             });
         }
     }
