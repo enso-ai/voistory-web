@@ -1,11 +1,40 @@
 import axios from 'axios'
 
-const client = axios.create({
-    baseURL: 'http://localhost:8000',
-    // baseURL: 'https://murky.enso-ai.app',
-})
+const LOCAL = 'LOCAL'
+const STAGING = 'STAGING'
+const ALPHA = 'ALPHA'
+const PROD = 'PROD'
 
-export const getChatSession = async (phone_number) => {
+export const CLUSTER_LIST = [
+    PROD,
+    ALPHA,
+    STAGING,
+    LOCAL,
+]
+
+const clients = {
+    LOCAL: axios.create({
+        baseURL: 'http://localhost:8000',
+    }),
+    STAGING: axios.create({
+        baseURL: 'https://murky-staging.enso-ai.dev',
+    }),
+    ALPHA: axios.create({
+        baseURL: 'https://murky-alpha.enso-ai.dev',
+    }),
+    PROD: axios.create({
+        baseURL: 'https://murky.enso-ai.app',
+    }),
+}
+
+export const getChatSession = async (cluster, phone_number) => {
+    if (!CLUSTER_LIST.includes(cluster)) {
+        throw Error(
+            `Invalid cluster: ${cluster}. Valid clusters: ${CLUSTER_LIST}`
+        );
+    }
+
+    const client = clients[cluster]
     const data = {
         phone_number,
         call_platform: 'webbrowser',
