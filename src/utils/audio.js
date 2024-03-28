@@ -36,7 +36,7 @@ export class Speaker {
         let nextBufferStartTime = 0;
         while (this.speakerOn) {
             // frame is not empty, draw audio data from it
-            if (this.frames.length > 1) {
+            if (this.frames.length > 0) {
                 // pop first chunk
                 const audioData = this.frames.shift();
 
@@ -62,7 +62,7 @@ export class Speaker {
                 // sure they are played in order.
                 source.start(nextBufferStartTime);
             } else {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 20));
             }
         }
     }
