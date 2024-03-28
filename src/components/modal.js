@@ -23,8 +23,8 @@ const ModalCard = styled.div`
     width: 320px;
     background-color: white;
     border-radius: 16px;
-    padding: 0px 24px;
-    padding-bottom: 80px;
+    padding: 0px 36px;
+    padding-bottom: 70px;
 
     display: flex;
     flex-direction: column;
@@ -43,6 +43,7 @@ const TitleContainer = styled.div`
 const ConfigContainer = styled.div`
     position: relative;
     max-width: 100%;
+    margin-bottom: 28px;
 `
 
 const PhoneInput = styled.input`
