@@ -18,8 +18,8 @@ const scaleAnimation = keyframes`
 // transform: scale(var(--scale-factor));
 // Styled component for the circle
 const AnimatedCircle = styled.div`
-    width: ${props => props.initialSize}px;
-    height: ${props => props.initialSize}px;
+    width: ${props => props.$initialSize}px;
+    height: ${props => props.$initialSize}px;
 
     transform-origin: center;
     animation: ${scaleAnimation} 1s ease-out infinite;
@@ -30,12 +30,12 @@ const AnimatedCircle = styled.div`
 `;
 
 // Component that uses the AnimatedCircle
-const CircleLoader = ({ initialSize, targetScale }) => {
+const CircleLoader = ({ initialSize }) => {
     // Calculate the target scale based on the percentage
     // Assuming the targetSize prop is a value between 0 and 1 (e.g., 0.5 for 50%)
 
     return <AnimatedCircle
-        initialSize={initialSize}
+        $initialSize={initialSize}
     />;
 
 };
