@@ -118,19 +118,15 @@ const SystemInfo = styled.div`
 `;
 
 const ChatPage = () => {
-    // const [isModalVisible, setModalVisible] = useState(true)
-    const [isModalVisible, setModalVisible] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(true)
     const [isLoading, setLoading] = useState(false)
     const [connected, setConnected] = useState(false)
     const [ws, setWs] = useState(false)
     const [mic, setMic] = useState(null)
     const [speaker, setSpeaker] = useState(null)
-    // const [phoneNumber, setPhoneNumber] = useState("")
-    // const [targetCluster, setTargetCluster] = useState("None")
-    // const [filterCode, setFilterCode] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("+13142508541")
-    const [targetCluster, setTargetCluster] = useState("LOCAL")
-    const [filterCode, setFilterCode] = useState("1")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [targetCluster, setTargetCluster] = useState("None")
+    const [filterCode, setFilterCode] = useState("")
 
     const initChatPage = (phoneNumber, targetCluster, filterCode) => {
         console.log("initChatPage", phoneNumber, targetCluster, filterCode)
@@ -221,7 +217,7 @@ const ChatPage = () => {
                     { connected ? <FaStop size="100%"/> : <FaMicrophone size="100%"/>}
                 </MicButton>
             </MicButtonContainer>
-            <AudioVisualizer source={mic} enable={connected} bgColor={"#6d6875"}/>
+            <AudioVisualizer source={mic} enable={connected} color="white" bgColor={"#6d6875"}/>
             <FooterContainer>
                 <FooterBlock>
                     <SystemInfo>Status: {connected ? "connected" : "disconnected"}</SystemInfo>
