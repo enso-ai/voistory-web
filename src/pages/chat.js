@@ -117,16 +117,14 @@ const SystemInfo = styled.div`
 `;
 
 const ChatPage = () => {
-    const [isModalVisible, setModalVisible] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(true)
     const [isLoading, setLoading] = useState(false)
     const [connected, setConnected] = useState(false)
     const [ws, setWs] = useState(false)
     const [mic, setMic] = useState(null)
     const [speaker, setSpeaker] = useState(null)
-    // const [phoneNumber, setPhoneNumber] = useState("")
-    // const [targetCluster, setTargetCluster] = useState("None")
-    const [phoneNumber, setPhoneNumber] = useState("3142508541")
-    const [targetCluster, setTargetCluster] = useState("LOCAL")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [targetCluster, setTargetCluster] = useState("None")
 
     const initChatPage = (phoneNumber, targetCluster) => {
         console.log("initChatPage", phoneNumber, targetCluster)
