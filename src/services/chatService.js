@@ -36,7 +36,7 @@ export const getChatSession = async (cluster, phone_number) => {
 
     const client = clients[cluster]
     const data = {
-        phone_number,
+        phone_number: "+1" + phone_number, // for now, hard code the number to us/ca only
         call_platform: 'webbrowser',
         filter_code: '',
         refer_code: '',
