@@ -13,7 +13,7 @@ const DropdownButton = styled.button`
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    width: 80px;
+    width: 100px;
     padding: 12px 16px;
 `;
 
@@ -21,7 +21,7 @@ const DropdownContent = styled.div`
     display: ${props => (props.$isOpen ? 'block' : 'none')};
     position: absolute;
     background-color: #f9f9f9;
-    width: 80px;
+    width: 100%;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 `;
@@ -76,7 +76,7 @@ const Dropdown = ({ options, defaultOptionIdx, optionPlaceholder, onChange }) =>
     return (
         <DropdownContainer ref={dropdownContainerRef}>
             <DropdownButton onClick={handleDropdownToggle}>
-                {selectedOption || optionPlaceholder || 'Select an option'}
+                {selectedOption || optionPlaceholder || 'Select an option'} &#9660;
             </DropdownButton>
             <DropdownContent $isOpen={isOpen}>
                 {options.map(option => (

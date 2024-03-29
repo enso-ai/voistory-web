@@ -82,6 +82,11 @@ const DropdownContainer = styled.div`
     right: 24px;
 `
 
+const DropdownLabel = styled.label`
+    font-size: 16px;
+    font-weight: 600;
+`
+
 const Modal = ({ onConfirm, showModal }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [selectedCluster, setSelectedCluster] = useState('');
@@ -138,6 +143,7 @@ const Modal = ({ onConfirm, showModal }) => {
                     </ConfirmButton>
                 </ConfigContainer>
                 <DropdownContainer>
+                    <DropdownLabel>Target Cluster (options): </DropdownLabel>
                     <Dropdown
                         options={CLUSTER_LIST}
                         optionPlaceholder={'Select a cluster'}
