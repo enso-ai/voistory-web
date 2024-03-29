@@ -2,6 +2,12 @@ export class Speaker {
     constructor() {
         this.frames = [];
         this.speakerOn = false;
+
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // setup up the analyser
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 2048;
     }
 
     // decode base64 string to float32Array that can be consumed by the audio context
@@ -31,7 +37,6 @@ export class Speaker {
     }
 
     async run() {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.speakerOn = true;
         let nextBufferStartTime = 0;
         while (this.speakerOn) {
@@ -44,7 +49,13 @@ export class Speaker {
                 const source = this.audioContext.createBufferSource();
                 source.buffer = this.audioContext.createBuffer(1, audioData.length, 16000);
                 source.buffer.copyToChannel(audioData, 0, 0);
-                source.connect(this.audioContext.destination);
+                // source.connect(this.audioContext.destination);
+
+                source.connect(
+                    this.analyser
+                ).connect(
+                    this.audioContext.destination
+                );
 
                 // if the last updated next buffer start time is in the past
                 // update it to the current time
@@ -90,10 +101,14 @@ export class Microphone {
     constructor() {
         this.audioStream = null;
         this.streaming = false;
+        this.audioCtx = new AudioContext({ sampleRate: 16000 });
+
+        // setup up the analyser
+        this.analyser = this.audioCtx.createAnalyser();
+        this.analyser.fftSize = 2048;
     }
 
     async run(handleData) {
-        this.audioCtx = new AudioContext({ sampleRate: 16000 });
         await this.audioCtx.audioWorklet.addModule('input-processor.js');
         this.stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -109,7 +124,14 @@ export class Microphone {
             this.frames.push(event.data);
         };
 
-        this.sourceNode.connect(this.processorNode).connect(this.audioCtx.destination);
+        this.sourceNode.connect(
+            this.analyser
+        ).connect(
+            this.processorNode
+        ).connect(
+            this.audioCtx.destination
+        );
+        // this.sourceNode.connect(this.processorNode).connect(this.audioCtx.destination);
     }
 
     async groupChunks(handleData) {
