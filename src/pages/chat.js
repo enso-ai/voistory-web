@@ -8,8 +8,9 @@ import { Speaker, Microphone} from 'utils/audio'
 import Modal from 'components/modal'
 import AudioVisualizer from 'components/audioVisualizer'
 import {
-    TbMicrophone, TbMicrophoneOff
-} from "react-icons/tb";
+    FaMicrophone, FaStop
+} from "react-icons/fa6";
+
 
 
 const Base = styled.div`
@@ -75,7 +76,7 @@ const MicButton = styled.div`
     box-sizing: border-box;
     width: 140px;
     height: 140px;
-    padding: 15px;
+    padding: 30px;
     border-radius: 50%;
     background-color: white;
 
@@ -117,15 +118,19 @@ const SystemInfo = styled.div`
 `;
 
 const ChatPage = () => {
-    const [isModalVisible, setModalVisible] = useState(true)
+    // const [isModalVisible, setModalVisible] = useState(true)
+    const [isModalVisible, setModalVisible] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [connected, setConnected] = useState(false)
     const [ws, setWs] = useState(false)
     const [mic, setMic] = useState(null)
     const [speaker, setSpeaker] = useState(null)
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [targetCluster, setTargetCluster] = useState("None")
-    const [filterCode, setFilterCode] = useState("")
+    // const [phoneNumber, setPhoneNumber] = useState("")
+    // const [targetCluster, setTargetCluster] = useState("None")
+    // const [filterCode, setFilterCode] = useState("")
+    const [phoneNumber, setPhoneNumber] = useState("+13142508541")
+    const [targetCluster, setTargetCluster] = useState("LOCAL")
+    const [filterCode, setFilterCode] = useState("1")
 
     const initChatPage = (phoneNumber, targetCluster, filterCode) => {
         console.log("initChatPage", phoneNumber, targetCluster, filterCode)
@@ -213,7 +218,7 @@ const ChatPage = () => {
                     <CircleLoader initialSize={130} targetScale={1.1}/>
                 </LoaderContainer>
                 <MicButton onClick={handleClick} disabled={isLoading}>
-                    { connected ? <TbMicrophoneOff size="100%"/> : <TbMicrophone size="100%"/>}
+                    { connected ? <FaStop size="100%"/> : <FaMicrophone size="100%"/>}
                 </MicButton>
             </MicButtonContainer>
             <AudioVisualizer source={mic} enable={connected} bgColor={"#6d6875"}/>
