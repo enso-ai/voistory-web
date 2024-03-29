@@ -2,11 +2,12 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components'
 
 const CanvasContainer = styled.div`
+    position: relative;
     height: ${props => props.height};
     width: ${props => props.width};
 
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     
     margin: 50px;
 
@@ -21,6 +22,16 @@ const CanvasContainer = styled.div`
             opacity: 1;
         }
     }
+`
+
+const CanvasMask = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #6d6875ff, transparent, #6d6875ff);
+
 `
 
 const clearCanvas = (canvas) => {
@@ -103,13 +114,14 @@ const AudioVisualizer = ({ source, color, enable, height, width }) => {
     }
 
     if (width === undefined) {
-        width = "150"
+        width = "400"
     }
 
     if (enable) {
         return (
             <CanvasContainer width={width} height={height}>
                 <canvas ref={canvasRef} id="audioVisualizer" width={width} height={height}></canvas>
+                <CanvasMask/>
             </CanvasContainer>
         )
     } else {
