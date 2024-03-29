@@ -125,11 +125,13 @@ const ChatPage = () => {
     const [speaker, setSpeaker] = useState(null)
     const [phoneNumber, setPhoneNumber] = useState("")
     const [targetCluster, setTargetCluster] = useState("None")
+    const [filterCode, setFilterCode] = useState("")
 
-    const initChatPage = (phoneNumber, targetCluster) => {
-        console.log("initChatPage", phoneNumber, targetCluster)
+    const initChatPage = (phoneNumber, targetCluster, filterCode) => {
+        console.log("initChatPage", phoneNumber, targetCluster, filterCode)
         setPhoneNumber(phoneNumber)
         setTargetCluster(targetCluster)
+        setFilterCode(filterCode)
         setModalVisible(false)
     }
 
@@ -143,7 +145,7 @@ const ChatPage = () => {
             setConnected(false)
             setLoading(false)
         } else {
-            getChatSession(targetCluster, phoneNumber).then(async (resp) => {
+            getChatSession(targetCluster, phoneNumber, filterCode).then(async (resp) => {
                 let {chat_session_id, websocket_url} = resp
                 console.log(chat_session_id, websocket_url)
                 const newSpeaker = new Speaker()
@@ -189,9 +191,6 @@ const ChatPage = () => {
                     }
                 })
 
-                // set up the sender pipeline
-
-
                 // waiting for the first message
                 setLoading(false)
                 setConnected(true)
@@ -223,6 +222,7 @@ const ChatPage = () => {
                     <SystemInfo>Status: {connected ? "connected" : "disconnected"}</SystemInfo>
                     <SystemInfo>#Cell: {phoneNumber}</SystemInfo>
                     <SystemInfo>Backend: { targetCluster }</SystemInfo>
+                    <SystemInfo>Filter: { filterCode }</SystemInfo>
                 </FooterBlock>
                 <FooterBlock>Powered by Voistory</FooterBlock>
             </FooterContainer>

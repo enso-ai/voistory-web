@@ -90,7 +90,7 @@ const DropdownLabel = styled.label`
 const Modal = ({ onConfirm, showModal }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [selectedCluster, setSelectedCluster] = useState('');
-
+    const [filterCode, setFilterCode] = useState("1")
 
     const handlePhoneNumberChange = (event) => {
         const value = event.target.value;
@@ -110,12 +110,10 @@ const Modal = ({ onConfirm, showModal }) => {
         // Return true if the phone number is valid, false otherwise
         if (phoneNumber.length === 10 && /^\d{10}$/.test(phoneNumber)) {
             console.log("Phone number is valid:", phoneNumber);
-            onConfirm(phoneNumber, selectedCluster)
+            onConfirm(phoneNumber, selectedCluster, filterCode)
         } else {
             console.log("Invalid phone number:", phoneNumber);
             alert("Invalid phone number")
-            // Phone number is invalid
-            // You can show an error message or alert to the user here
         }
     };
 

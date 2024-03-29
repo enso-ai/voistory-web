@@ -27,7 +27,7 @@ const clients = {
     }),
 }
 
-export const getChatSession = async (cluster, phone_number) => {
+export const getChatSession = async (cluster, phone_number, filterCode) => {
     if (!CLUSTER_LIST.includes(cluster)) {
         throw Error(
             `Invalid cluster: ${cluster}. Valid clusters: ${CLUSTER_LIST}`
@@ -38,7 +38,7 @@ export const getChatSession = async (cluster, phone_number) => {
     const data = {
         phone_number: "+1" + phone_number, // for now, hard code the number to us/ca only
         call_platform: 'webbrowser',
-        filter_code: '1',
+        filter_code: filterCode,
         refer_code: '',
     }
 
