@@ -1,13 +1,24 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import styled, { keyframes } from 'styled-components';
 import {
     IoIosArrowUp, IoIosArrowDown
 } from "react-icons/io";
 
 // Keyframe animation for sliding
-const sliding = keyframes`
+const slidingOut = keyframes`
     from {
-        max-height: 1000px;
+        max-height: 0px;
+    }
+    to {
+        overflow: normal;
+        max-height: 300px;
+    }
+`;
+
+// Keyframe animation for sliding
+const slidingIn = keyframes`
+    from {
+        max-height: 300px;
     }
     to {
         overflow: hidden;
@@ -36,7 +47,11 @@ const AdvancedConfigSwitch = styled.div`
 
 const AdvancedConfigItemContainer = styled.div`
     position: relative;
-    animation: ${sliding} 0.2s ${({isOpen}) => (isOpen? 'forwards': 'backwards')};
+    max-height: 0px;
+    overflow: hidden;
+    animation: ${({ isInit, isOpen }) => (
+        isInit? 'none': isOpen? slidingOut: slidingIn
+    )} 0.5s forwards;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px 20px;
@@ -46,7 +61,15 @@ const AdvancedConfigItemContainer = styled.div`
 `
 
 const AdvancedConfig = ({ children }) => {
+    const [isInit, setIsInit] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        if (isInit && isOpen) {
+            console.log("isInit changed to false", isInit)
+            setIsInit(false);
+        }
+    }, [isOpen])
 
     return (
         <AdvancedConfigContainer>
@@ -61,7 +84,7 @@ const AdvancedConfig = ({ children }) => {
                         <IoIosArrowDown size="20px" />
                 }
             </AdvancedConfigSwitch>
-            <AdvancedConfigItemContainer isOpen={isOpen}>
+            <AdvancedConfigItemContainer isInit={isInit} isOpen={isOpen}>
                 {children}
             </AdvancedConfigItemContainer>
         </AdvancedConfigContainer>
