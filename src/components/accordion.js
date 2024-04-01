@@ -7,9 +7,10 @@ import {
 // Keyframe animation for sliding
 const sliding = keyframes`
     from {
-        max-height: 300px;
+        max-height: 1000px;
     }
     to {
+        overflow: hidden;
         max-height: 0px;
     }
 `;
@@ -35,8 +36,13 @@ const AdvancedConfigSwitch = styled.div`
 
 const AdvancedConfigItemContainer = styled.div`
     position: relative;
-    overflow: hidden;
-    animation: ${sliding} 0.2s ${({isOpen}) => (isOpen? 'forwards': 'backward')};
+    animation: ${sliding} 0.2s ${({isOpen}) => (isOpen? 'forwards': 'backwards')};
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px 20px;
+    align-items: center;
+    justify-items: start;
+    justify-content: start;
 `
 
 const AdvancedConfig = ({ children }) => {
