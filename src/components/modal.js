@@ -77,12 +77,18 @@ const ConfirmButton = styled.button`
     }
 `;
 
-const DropdownContainer = styled.div`
-`
-
 const DropdownLabel = styled.label`
     font-size: 16px;
     font-weight: 600;
+`
+
+const FilterCodeLabel = styled.label`
+    font-size: 16px;
+    font-weight: 600;
+`
+
+const FilterCodeInput = styled.input`
+    width: 90px;
 `
 
 const Modal = ({ onConfirm, showModal }) => {
@@ -122,6 +128,18 @@ const Modal = ({ onConfirm, showModal }) => {
         }
     };
 
+    const validateFilterCode = (filterCode) => {
+        return (/^\d+$/.test(filterCode)) || filterCode === ""
+    }
+
+    const handleSetFilterCode = (event) => {
+        if (validateFilterCode(event.target.value)) {
+            setFilterCode(event.target.value)
+        } else {
+            alert(`Invalid filter code:${event.value}`)
+        }
+    }
+
     return (
         <ModalContainer $visible={showModal}>
             <ModalCard>
@@ -139,14 +157,17 @@ const Modal = ({ onConfirm, showModal }) => {
                     </ConfirmButton>
                 </ConfigContainer>
                 <AdvancedConfig>
-                    <DropdownContainer>
-                        <DropdownLabel>Target Cluster (options): </DropdownLabel>
-                        <Dropdown
-                            options={CLUSTER_LIST}
-                            optionPlaceholder={'Select a cluster'}
-                            onChange={handleClusterChange}
-                        />
-                    </DropdownContainer>
+                    <DropdownLabel>Target Cluster: </DropdownLabel>
+                    <Dropdown
+                        options={CLUSTER_LIST}
+                        optionPlaceholder={'Select a cluster'}
+                        onChange={handleClusterChange}
+                    />
+                    <FilterCodeLabel>Filter Code:</FilterCodeLabel>
+                    <FilterCodeInput
+                        type="text"
+                        value={filterCode}
+                        onChange={handleSetFilterCode} />
                 </AdvancedConfig>
             </ModalCard>
         </ModalContainer>
