@@ -3,6 +3,7 @@ import Dropdown from './dropdown';
 import { CLUSTER_LIST } from 'services/chatService';
 import styled from 'styled-components';
 import { ArrorwRight } from 'icons/Arrows';
+import AdvancedConfig from './accordion';
 
 const ModalContainer = styled.div`
     visibility: ${props => props.$visible ? 'visible' : 'hidden'};
@@ -24,7 +25,7 @@ const ModalCard = styled.div`
     background-color: white;
     border-radius: 16px;
     padding: 0px 36px;
-    padding-bottom: 70px;
+    padding-bottom: 36px;
 
     display: flex;
     flex-direction: column;
@@ -77,9 +78,6 @@ const ConfirmButton = styled.button`
 `;
 
 const DropdownContainer = styled.div`
-    position: absolute;
-    bottom: 24px;
-    right: 24px;
 `
 
 const DropdownLabel = styled.label`
@@ -140,14 +138,16 @@ const Modal = ({ onConfirm, showModal }) => {
                         <ArrorwRight />
                     </ConfirmButton>
                 </ConfigContainer>
-                <DropdownContainer>
-                    <DropdownLabel>Target Cluster (options): </DropdownLabel>
-                    <Dropdown
-                        options={CLUSTER_LIST}
-                        optionPlaceholder={'Select a cluster'}
-                        onChange={handleClusterChange}
-                    />
-                </DropdownContainer>
+                <AdvancedConfig>
+                    <DropdownContainer>
+                        <DropdownLabel>Target Cluster (options): </DropdownLabel>
+                        <Dropdown
+                            options={CLUSTER_LIST}
+                            optionPlaceholder={'Select a cluster'}
+                            onChange={handleClusterChange}
+                        />
+                    </DropdownContainer>
+                </AdvancedConfig>
             </ModalCard>
         </ModalContainer>
     );
