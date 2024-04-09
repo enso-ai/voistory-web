@@ -10,7 +10,7 @@ const slidingOut = keyframes`
         max-height: 0px;
     }
     to {
-        overflow: normal;
+        overflow: visible;
         max-height: 300px;
     }
 `;
@@ -19,9 +19,9 @@ const slidingOut = keyframes`
 const slidingIn = keyframes`
     from {
         max-height: 300px;
+        overflow: visible;
     }
     to {
-        overflow: hidden;
         max-height: 0px;
     }
 `;
